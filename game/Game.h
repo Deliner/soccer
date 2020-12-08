@@ -22,6 +22,7 @@ private:
     void simulate();
     void render();
     void updateInput();
+    void showGameWindow();
     virtual void onGoal();
 
 };

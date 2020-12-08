@@ -11,6 +11,7 @@ Game::Game() {
 }
 
 void Game::start() {
+    showGameWindow();
     simulate();
 }
 
@@ -38,5 +39,9 @@ void Game::render() {
 }
 
 void Game::updateInput() {
+
+}
+
+void Game::showGameWindow() {
 
 }

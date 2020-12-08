@@ -8,15 +8,31 @@
 
 #include "Player.h"
 #include "Options.h"
+#include "Ball.h"
+#include <box2d/box2d.h>
 
 class World {
 public:
     class Callback;
 public:
+    World();
     void nextStep(long long mls);
 
 private:
-    Player player_array[2*PLAYER_PER_TEAM];
+    b2World *world;
+    Player *first_team;
+    Player *second_team;
+    Ball *ball;
+    b2Body *field;
+    b2Fixture *left_goal_zone;
+    b2Fixture *right_goal_zone;
+
+
+private:
+    void initWorld();
+    void createField();
+    void createGoal();
+
 };
 
 class World::Callback{
