@@ -16,21 +16,18 @@ void Game::start() {
 }
 
 void Game::simulate() {
-    long long last_time = SoccerUtils::getCurrentTime();
+//    long long last_time = SoccerUtils::getCurrentTime();
     while(!is_goal){
 
         updateInput();
-
-        long long current_time = SoccerUtils::getCurrentTime();
-        long long elapsed_time = current_time - last_time;
-        world->nextStep(elapsed_time);
+//        world->nextStep(elapsed_time);
 
         render();
     }
 
 }
 
-void Game::onGoal() {
+void Game::onGoal(bool inLeft) {
     is_goal = true;
 }
 

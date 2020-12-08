@@ -23,7 +23,7 @@ private:
     void render();
     void updateInput();
     void showGameWindow();
-    virtual void onGoal();
+    void onGoal(bool inLeft) override;
 
 };
 

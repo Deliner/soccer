@@ -11,32 +11,43 @@
 #include "Ball.h"
 #include <box2d/box2d.h>
 
-class World {
+class World : public b2ContactListener {
 public:
     class Callback;
+
 public:
-    World();
-    void nextStep(long long mls);
+    World(World::Callback *callback);
+
+    void BeginContact(b2Contact *contact) override;
 
 private:
-    b2World *world;
-    Player *first_team;
-    Player *second_team;
-    Ball *ball;
-    b2Body *field;
-    b2Fixture *left_goal_zone;
-    b2Fixture *right_goal_zone;
+    Player *first_team[PLAYER_PER_TEAM];
+    Player *second_team[PLAYER_PER_TEAM];
 
+    b2World *world = NULL;
+    Ball *ball = NULL;
+    b2Body *field = NULL;
+    b2Fixture *left_goal_zone = NULL;
+    b2Fixture *right_goal_zone = NULL;
+
+    World::Callback *callback = NULL;
 
 private:
-    void initWorld();
+    void createWorld();
+
     void createField();
+
     void createGoal();
+
+    void createPlayers();
+
+    void createBall();
 
 };
 
-class World::Callback{
-    virtual void onGoal() = 0;
+class World::Callback {
+public:
+    virtual void onGoal(bool inLeft) = 0;
 };
 
 #endif //SOCCER_WORLD_H
