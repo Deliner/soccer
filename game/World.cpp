@@ -116,3 +116,19 @@ void World::BeginContact(b2Contact *contact) {
         }
     }
 }
+
+Player **World::getFirstTeam() {
+    return first_team;
+}
+
+Player **World::getSecondTeam() {
+    return second_team;
+}
+
+b2Vec2 World::getBallPosition() {
+    return ball->getBody()->GetPosition();
+}
+
+void World::step() {
+    world->Step(60, 8, 8);
+}

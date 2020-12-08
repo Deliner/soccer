@@ -18,7 +18,10 @@ public:
 public:
     World(World::Callback *callback);
 
-    void BeginContact(b2Contact *contact) override;
+    Player **getFirstTeam();
+    Player **getSecondTeam();
+    b2Vec2 getBallPosition();
+    void step();
 
 private:
     Player *first_team[PLAYER_PER_TEAM];
@@ -42,6 +45,8 @@ private:
     void createPlayers();
 
     void createBall();
+
+    void BeginContact(b2Contact *contact) override;
 
 };
 
