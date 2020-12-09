@@ -6,7 +6,7 @@
 
 World::World(World::Callback *callback) {
     this->callback = callback;
-    world = new b2World(b2Vec2(0.0, 0.0));
+    world = new b2World(b2Vec2(1, 0));
     world->SetContactListener(this);
     createWorld();
 }
@@ -59,10 +59,10 @@ void World::createGoal() {
     b2BodyDef bd2;
     bd2.type = b2_staticBody;
 
-    bd2.position.Set(-56.0f, 0.0f);
+    bd2.position.Set(-(FIELD_X_SIZE + GOAL_X_SIZE)/2 , 0.0f);
     auto left_goal = world->CreateBody(&bd2);
 
-    bd2.position.Set(56.0f, 0.0f);
+    bd2.position.Set((FIELD_X_SIZE + GOAL_X_SIZE)/2, 0.0f);
     auto right_goal = world->CreateBody(&bd2);
 
     b2PolygonShape shape2;
@@ -130,5 +130,5 @@ b2Vec2 World::getBallPosition() {
 }
 
 void World::step() {
-    world->Step(60, 8, 8);
+    world->Step(60, 40, 40);
 }

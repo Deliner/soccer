@@ -7,18 +7,19 @@
 
 #include "SFML/Graphics.hpp"
 #include "World.h"
+#include "GameWindow.h"
 
 class Game : public World::Callback {
 
 private:
-    sf::RenderWindow *window;
+    GameWindow *window;
     World *world;
 
     bool is_goal;
 
-    int scaleFactor;
-    int window_x;
-    int window_y;
+    float scale_factor;
+    float window_x;
+    float window_y;
 
 public:
     Game();
@@ -50,6 +51,5 @@ private:
 
     void updateWindowSettings();
 };
-
 
 #endif //SOCCER_GAME_H

@@ -9,8 +9,9 @@
 Game::Game() {
     world = new World(this);
     is_goal = false;
-    window = new sf::RenderWindow(sf::VideoMode(1280, 720), "Soccer");
+    window = new GameWindow(sf::VideoMode(1280, 720), "Soccer");
     window->setFramerateLimit(60);
+    window->setVerticalSyncEnabled(true);
 }
 
 void Game::start() {
@@ -23,13 +24,13 @@ void Game::start() {
 void Game::simulate() {
     long long last_time = SoccerUtils::getCurrentTime();
     while (window->isOpen()) {
-        while (!is_goal && window->isOpen()) {
-            long long current_time = SoccerUtils::getCurrentTime();
-            if ((current_time - last_time) > INPUT_TIME_UPDATE)
-                updateInput();
-            world->step();
-            render();
-        }
+//        if (!is_goal) {
+        long long current_time = SoccerUtils::getCurrentTime();
+        if ((current_time - last_time) > INPUT_TIME_UPDATE)
+            updateInput();
+        world->step();
+//        }
+        render();
     }
 }
 
@@ -38,7 +39,9 @@ void Game::onGoal(bool inLeft) {
 }
 
 void Game::render() {
-    updateWindowSettings();
+    if (window->wasResized())
+        updateWindowSettings();
+
     renderBackground();
     renderBall();
     renderPlayers();
@@ -64,19 +67,45 @@ void Game::renderBackground() {
 }
 
 void Game::renderField() {
+    float rect_x = (FIELD_X_SIZE) * scale_factor;
+    float rect_y = (FIELD_Y_SIZE) * scale_factor;
 
+    auto rect = sf::RectangleShape(Vector2f(rect_x, rect_y));
+    rect.setOrigin(rect_x / 2, rect_y / 2);
+    rect.setPosition(window_x / 2, window_y / 2);
+    rect.setFillColor(Color(0, 0, 0, 0));
+    rect.setOutlineThickness(LINE_SIZE * scale_factor/2);
+    rect.setOutlineColor(Color(255, 255, 255));
+    window->draw(rect);
 }
 
 void Game::renderGoal() {
+    float rect_x = (GOAL_X_SIZE-LINE_SIZE/2) * scale_factor;
+    float rect_y = GOAL_Y_SIZE * scale_factor;
+
+    auto rect = sf::RectangleShape(Vector2f(rect_x, rect_y));
+    rect.setFillColor(Color(0, 0, 0, 0));
+    rect.setOutlineThickness(LINE_SIZE * scale_factor/2);
+    rect.setOutlineColor(Color(255, 255, 255));
+
+    rect.setOrigin(rect_x, rect_y / 2);
+    rect.setPosition(window_x / 2 - (FIELD_X_SIZE + LINE_SIZE) * scale_factor / 2, window_y / 2);
+    window->draw(rect);
+
+    rect.setOrigin(0, rect_y / 2);
+    rect.setPosition(window_x / 2 + (FIELD_X_SIZE + LINE_SIZE) * scale_factor / 2, window_y / 2);
+    window->draw(rect);
 
 }
 
 void Game::renderBall() {
     b2Vec2 position = world->getBallPosition();
-    int x_pos = position.x * scaleFactor + window_x / 2;
-    int y_pos = position.y * scaleFactor + window_y / 2;
-
-    auto ball = sf::CircleShape(BALL_SIZE * scaleFactor / 2, 120);
+    float radius = BALL_SIZE * scale_factor / 2;
+    float x_pos = position.x * scale_factor + window_x / 2;
+    float y_pos = -position.y * scale_factor + window_y / 2;
+//    printf("ball x: %f y: %f\n", x_pos, y_pos);
+    auto ball = sf::CircleShape(radius, 360);
+    ball.setOrigin(radius, radius);
     ball.setPosition(x_pos, y_pos);
     ball.setFillColor(sf::Color(128, 128, 128));
     window->draw(ball);
@@ -94,10 +123,12 @@ void Game::renderPlayers() {
 }
 
 void Game::renderPlayer(b2Vec2 position, float angle, bool inFirstTeam) {
-    int x_pos = position.x * scaleFactor + window_x / 2;
-    int y_pos = position.y * scaleFactor + window_y / 2;
+    float radius = PLAYER_SIZE * scale_factor / 2;
+    float x_pos = position.x * scale_factor + window_x / 2;
+    float y_pos = -position.y * scale_factor + window_y / 2;
 
-    auto player = sf::CircleShape(PLAYER_SIZE * scaleFactor / 2, 120);
+    auto player = sf::CircleShape(radius, 360);
+    player.setOrigin(radius, radius);
     player.setPosition(x_pos, y_pos);
     player.setFillColor(inFirstTeam ? sf::Color(255, 0, 0) : sf::Color(0, 0, 255));
     window->draw(player);
@@ -108,7 +139,11 @@ void Game::updateWindowSettings() {
     window_x = size.x;
     window_y = size.y;
 
-    int x_scale = window_x / (int) GAME_X_SIZE;
-    int y_scale = window_y / (int) GAME_Y_SIZE;
-    scaleFactor = std::min(x_scale, y_scale);
+//    printf("x: %f y: %f\n", window_x, window_y);
+
+    float x_scale = window_x / GAME_X_SIZE;
+    float y_scale = window_y / GAME_Y_SIZE;
+    scale_factor = std::min(x_scale, y_scale);
+    printf("scale_factor: %f %f %f\n", scale_factor, x_scale, y_scale);
 }
+
