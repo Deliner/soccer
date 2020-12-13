@@ -139,11 +139,13 @@ void Game::updateWindowSettings() {
     window_x = size.x;
     window_y = size.y;
 
-//    printf("x: %f y: %f\n", window_x, window_y);
+    sf::FloatRect area(0,0,window_x, window_y);
+    window->setView(sf::View(area));
 
+    // printf("x: %f y: %f\n", window_x, window_y);
     float x_scale = window_x / GAME_X_SIZE;
     float y_scale = window_y / GAME_Y_SIZE;
     scale_factor = std::min(x_scale, y_scale);
-    printf("scale_factor: %f %f %f\n", scale_factor, x_scale, y_scale);
+    // printf("scale_factor: %f %f %f\n", scale_factor, x_scale, y_scale);
 }
 

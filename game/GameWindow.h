@@ -11,9 +11,9 @@ using namespace sf;
 
 class GameWindow : public sf::RenderWindow {
 
-
 private:
     bool was_resized = true;
+
 public:
     void onResize() override;
 

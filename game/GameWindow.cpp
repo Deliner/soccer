@@ -5,7 +5,6 @@
 #include "GameWindow.h"
 
 void GameWindow::onResize() {
-    RenderWindow::onResize();
     was_resized = true;
 }
 
