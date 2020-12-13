@@ -15,6 +15,9 @@ private:
     GameWindow *window;
     World *world;
 
+    World::TeemData *first_team_data;
+    World::TeemData *second_team_data;
+
     bool is_goal;
 
     float scale_factor;

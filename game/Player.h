@@ -22,11 +22,11 @@ private:
 
 public:
 
-    void setPosition(float x, float y);
+    void setPosition(b2Vec2 vec);
 
     void setAngle(float angle);
 
-    void setSpeed(float x, float y);
+    void setSpeed(b2Vec2 vec);
 
     b2Body *getBody();
 

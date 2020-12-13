@@ -10,7 +10,7 @@
 
 namespace SoccerUtils {
 
-    long long getCurrentTime() {
+    static long long getCurrentTime() {
         struct timeval tv;
 
         gettimeofday(&tv, NULL);

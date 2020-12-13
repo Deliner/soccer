@@ -8,6 +8,10 @@
 
 Game::Game() {
     world = new World(this);
+
+    first_team_data = world->getFirstTeemData();
+    second_team_data = world->getSecondTeemData();
+
     is_goal = false;
     window = new GameWindow(sf::VideoMode(1280, 720), "Soccer");
     window->setFramerateLimit(60);
@@ -74,18 +78,18 @@ void Game::renderField() {
     rect.setOrigin(rect_x / 2, rect_y / 2);
     rect.setPosition(window_x / 2, window_y / 2);
     rect.setFillColor(Color(0, 0, 0, 0));
-    rect.setOutlineThickness(LINE_SIZE * scale_factor/2);
+    rect.setOutlineThickness(LINE_SIZE * scale_factor / 2);
     rect.setOutlineColor(Color(255, 255, 255));
     window->draw(rect);
 }
 
 void Game::renderGoal() {
-    float rect_x = (GOAL_X_SIZE-LINE_SIZE/2) * scale_factor;
+    float rect_x = (GOAL_X_SIZE - LINE_SIZE / 2) * scale_factor;
     float rect_y = GOAL_Y_SIZE * scale_factor;
 
     auto rect = sf::RectangleShape(Vector2f(rect_x, rect_y));
     rect.setFillColor(Color(0, 0, 0, 0));
-    rect.setOutlineThickness(LINE_SIZE * scale_factor/2);
+    rect.setOutlineThickness(LINE_SIZE * scale_factor / 2);
     rect.setOutlineColor(Color(255, 255, 255));
 
     rect.setOrigin(rect_x, rect_y / 2);
@@ -112,10 +116,11 @@ void Game::renderBall() {
 }
 
 void Game::renderPlayers() {
-    Player **first_team = world->getFirstTeam();
-    Player **second_team = world->getSecondTeam();
+    Player **first_team = first_team_data->player_arr;
+    Player **second_team = second_team_data->player_arr;
+
     for (int team = 0; team < 2; team++) {
-        for (int id = 0; id < PLAYER_PER_TEAM; id++) {
+        for (int id = 0; id < (!team ? FIRST_TEAM_PLAYERS : SECOND_TEAM_PLAYERS); id++) {
             auto player = (!team ? first_team : second_team)[id];
             renderPlayer(player->getBody()->GetPosition(), player->getBody()->GetAngle(), !team);
         }
@@ -139,7 +144,7 @@ void Game::updateWindowSettings() {
     window_x = size.x;
     window_y = size.y;
 
-    sf::FloatRect area(0,0,window_x, window_y);
+    sf::FloatRect area(0, 0, window_x, window_y);
     window->setView(sf::View(area));
 
     // printf("x: %f y: %f\n", window_x, window_y);
